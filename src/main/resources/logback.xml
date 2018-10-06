@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <property name="appName" value="goldtaker"/>
+    <property name="patternHeader" value="%d{yyyyMMddHHmmss:SSS}.${appName}.%level&gt;"/>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- deny all events with a level below INFO, that is TRACE and DEBUG -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+        <!-- encoder 默认配置为PatternLayoutEncoder -->
+        <encoder>
+            <pattern>${patternHeader}%logger{36} | %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="LOGFILE"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${goldtaker.logging.path}/goldtaker.log</file>
+        <append>true</append>
+        <!-- deny all events with a level below INFO, that is TRACE and DEBUG -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- roll daily -->
+            <fileNamePattern>${goldtaker.logging.path}/goldtaker.%d{yyyyMMdd}.%i.log
+            </fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!-- or whenever the file size reaches 512MB -->
+                <maxFileSize>128MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${patternHeader}%logger{36} | %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ERRFILE"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${goldtaker.logging.path}/goldtaker.error.log</file>
+        <append>true</append>
+        <!-- deny all events with a level below WARN, that is INFO TRACE and DEBUG -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>WARN</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- roll daily -->
+            <fileNamePattern>${goldtaker.logging.path}/goldtaker.%d{yyyyMMdd}.error.%i.log
+            </fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!-- or whenever the file size reaches 512MB -->
+                <maxFileSize>128MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${patternHeader}%logger{36} | %m%n%throwable%n</pattern>
+        </encoder>
+    </appender>
+
+    <root>
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="LOGFILE"/>
+        <appender-ref ref="ERRFILE"/>
+    </root>
+
+</configuration>
