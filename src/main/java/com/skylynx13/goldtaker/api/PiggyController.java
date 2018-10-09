@@ -21,6 +21,6 @@ public class PiggyController {
     @RequestMapping(value = "/piggy", method = RequestMethod.POST)
     public ResponseEntity<String> process(@RequestBody String body) {
         LOGGER.info("Request body is: [" + body + "]");
-        return new ResponseEntity<>(piggy.process(body), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(piggy.process(body), HttpStatus.OK);
     }
 }
